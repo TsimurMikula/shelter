@@ -1,0 +1,42 @@
+.ourfriends-cards {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 90px;
+}
+
+.ourfriends-card {
+    display: flex;
+    flex-direction: column;
+    width: 270px;
+    height: 435px;
+    background: #FAFAFA;
+    border-radius: 9px;
+    letter-spacing: 0.06em;
+}
+
+.ourfriends-card__name {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.ourfriends-card__button {
+    width: 187px;
+    height: 52px;
+    font-family: 'Georgia';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 22px;
+    letter-spacing: 0.06em;
+    color: #292929;
+    background-color: #FAFAFA;
+    border: 2px solid #F1CDB3;
+    border-radius: 100px;
+    margin-top: 12px;
+    margin-left: 42px;
+    cursor: pointer;
+}
