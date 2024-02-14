@@ -428,6 +428,14 @@ img {
     margin-left: 53px;
 }
 
+.slider-anim-left {
+    animation: anim-left 3s;
+}
+
+.slider-anim-right {
+    animation: anim-right 3s;
+}
+
 .ourfriends-button {
     font-family: 'Georgia';
     font-style: normal;
@@ -470,6 +478,11 @@ img {
     display: flex;
     justify-content: flex-end;
     margin-right: -42px;
+}
+
+.popup-close__img {
+  background-color: #fafafa;
+  border-radius: 100%;
 }
 
 .popup-content {
@@ -533,14 +546,6 @@ img {
     to {
         left: -1980px;
     }
-}
-
-.slider-anim-left {
-    animation: anim-left 3s;
-}
-
-.slider-anim-right {
-    animation: anim-right 3s;
 }
 
 /* Ourfriends styles end */
