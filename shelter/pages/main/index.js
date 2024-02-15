@@ -1,4 +1,5 @@
 console.log('1. Вёрстка страницы Main соответствует макету при ширине экрана 1280px: +14\n2. Вёрстка страницы Main соответствует макету при ширине экрана 768px: +14\n3. Вёрстка страницы Main соответствует макету при ширине экрана 320px: +14\n4. Вёрстка страницы Pets соответствует макету при ширине экрана 1280px: +6\n5. Вёрстка страницы Pets соответствует макету при ширине экрана 768px: +6\n6. Вёрстка страницы Pets соответствует макету при ширине экрана 320px: +6\n7. Ни на одном из разрешений до 320px включительно не появляется горизонтальная полоса прокрутки, справа от отдельных блоков не появляются белые поля. Весь контент страницы при этом сохраняется: не обрезается и не удаляется: +20\n8. Верстка резиновая: при плавном изменении размера экрана от 1280px до 320px верстка подстраивается под этот размер, элементы верстки меняют свои размеры и расположение, не наезжают друг на друга, изображения могут менять размер, но сохраняют правильные пропорции (Примеры неправильной и правильной реализации): +8\n9. При ширине экрана меньше 768px на обеих страницах меню в хедере скрывается, появляется иконка бургер-меню: +4\n10. Верстка обеих страниц валидная: +8');
+import sliderCards from "./main.json" assert { type: "json" };
 
 //Burger menu start
 (function () {
@@ -36,8 +37,6 @@ console.log('1. Вёрстка страницы Main соответствует 
 //Burger menu end
 
 //Slider start
-import sliderCards from "./main.json" assert { type: "json" };
-
 (function () {
   const btn_left = document.querySelector('.arrow-left');
   const btn_right = document.querySelector('.arrow-right');
@@ -46,51 +45,49 @@ import sliderCards from "./main.json" assert { type: "json" };
   const cardsCenter = document.querySelector('#cards-center');
   const cardsRight = document.querySelector('#cards-right');
 
-  function init () {  
+  function posCards () {  
     let arr3 = [];
     while (true) {        
-      let r = Math.floor(Math.random() * 8);      
-      if (arr3.length == 3) break;
+      let r = Math.round(Math.random() * 7);      
+      if (arr3.length === 3) break;
       else if (!arr3.includes(r)) arr3.push(r);
     }
 
-    let arr2 = arr3.concat();
+    let arr2 = [...arr3];
     arr3 = [];
     while (true) {        
-      let r = Math.floor(Math.random() * 8);      
-      if (arr3.length == 3) break;
+      let r = Math.round(Math.random() * 7);      
+      if (arr3.length === 3) break;
       else if (!arr3.includes(r) && !arr2.includes(r)) arr3.push(r);
     }
 
-    let arr1 = arr2.concat();
+    let arr1 = [...arr2];
     arr2 = [];
 
-    arr2 = arr3.concat();
+    arr2 = [...arr3];
     arr3 = [];
     while (true) {        
-      let r = Math.floor(Math.random() * 8);      
-      if (arr3.length == 3) break;
+      let r = Math.round(Math.random() * 7);      
+      if (arr3.length === 3) break;
       else if (!arr3.includes(r) && !arr2.includes(r)) arr3.push(r);
     }
 
     return [arr1, arr2, arr3];
   }
 
-  let randomCards = init();
-  console.log(randomCards)
-
-  const createCards = (i, j) => {
+  const createCard = (i, j, randomArrays) => {
     const card = document.createElement('div');
     card.classList.add('ourfriends-card');
 
     const cardImg = document.createElement('img');
-    cardImg.src = `${sliderCards[randomCards[i][j]]['img']}`;
-    card.prepend(cardImg);
-
+    cardImg.classList.add('ourfriends-card__img');
+    cardImg.src = `${sliderCards[randomArrays[i][j]].img}`;
+    card.append(cardImg);
+    
     const cardName = document.createElement('h3');
     cardName.classList.add('ourfriends-card__name');
-    cardName.innerText = sliderCards[randomCards[i][j]]['name'];
-    card.classList.add(`${sliderCards[randomCards[i][j]]['name']}`);
+    cardName.innerText = sliderCards[randomArrays[i][j]]["name"];
+    card.classList.add(`${sliderCards[randomArrays[i][j]]["name"]}`);
     card.append(cardName);
 
     const cardBtn = document.createElement('button');
@@ -101,46 +98,69 @@ import sliderCards from "./main.json" assert { type: "json" };
     return card;
   }
 
-  cardsCenter.innerHTML = '';
-  for (let j = 0; j < 3; j++) {
-    const card = createCards(1, j);
-    cardsCenter.appendChild(card);
-  }    
-   
+  function createCardsHtml(cardsWrap, pos) {
+    cardsWrap.innerHTML = "";
+    for (let j = 0; j < 3; j++) {
+      const card = createCard(pos, j, randomPosCards);
+      cardsWrap.append(card);
+    }   
+  }
+
+  function createCardsWithoutDuplicate(cardsWrap, pos, randCards) {
+    for (let node of cardsCenter.children) {
+      for (let j = 0; j < 3; j++) {
+        const potentialCard = createCard(pos, j, randCards);
+        if (
+          node.innerHTML === potentialCard.innerHTML &&
+          cardsWrap.children.length < 3
+        ) {
+          const card = createCard(1, j, randCards);
+          cardsWrap.append(card);
+        } else if (cardsWrap.children.length < 3) {
+          const card = potentialCard;
+          cardsWrap.append(card);
+        }
+      }
+    }
+  }
+
   const animLeft = () => {
-    slider.classList.add('slider-anim-left');
-    btn_left.removeEventListener('click', animLeft);
-    btn_right.removeEventListener('click', animRight);
-  }
+    slider.classList.add("slider-anim-left");
+    btn_left.removeEventListener("click", animLeft);
+    btn_right.removeEventListener("click", animRight);
+  };
   const animRight = () => {
-    slider.classList.add('slider-anim-right');
-    btn_right.removeEventListener('click', animRight);
-    btn_left.removeEventListener('click', animLeft);
-  }
+    slider.classList.add("slider-anim-right");
+    btn_right.removeEventListener("click", animRight);
+    btn_left.removeEventListener("click", animLeft);
+  };
+
+  const randomPosCards = posCards();
+
+  createCardsHtml(cardsLeft, 0);
+  createCardsHtml(cardsCenter, 1);
+  createCardsHtml(cardsRight, 2); 
 
   btn_left.addEventListener('click', animLeft);
   btn_right.addEventListener('click', animRight);
-
  
   slider.addEventListener('animationend', (animationEvent) => {
     if (animationEvent.animationName === 'anim-left') {
       slider.classList.remove('slider-anim-left');
-      document.querySelector('#cards-center').innerHTML = cardsLeft.innerHTML;
+      cardsRight.innerHTML = cardsCenter.innerHTML;
+      cardsCenter.innerHTML = cardsLeft.innerHTML;
 
       cardsLeft.innerHTML = '';
-      for (let j = 0; j < 3; j++) {
-        const card = createCards(0, j);
-        cardsLeft.appendChild(card);
-      }  
+      const newRandomCards = posCards();
+      createCardsWithoutDuplicate(cardsLeft, 0, newRandomCards);
     } else {
       slider.classList.remove('slider-anim-right');
-      document.querySelector('#cards-center').innerHTML = cardsRight.innerHTML;
+      cardsLeft.innerHTML = cardsCenter.innerHTML;
+      cardsCenter.innerHTML = cardsRight.innerHTML;
 
       cardsRight.innerHTML = '';
-      for (let j = 0; j < 3; j++) {
-        const card = createCards(2, j);
-        cardsRight.appendChild(card);
-      }
+      const newRandomCards = posCards();
+      createCardsWithoutDuplicate(cardsRight, 2, newRandomCards);
     }
 
     btn_left.addEventListener('click', animLeft);
@@ -153,25 +173,25 @@ import sliderCards from "./main.json" assert { type: "json" };
 
 (function () {
   const overlay = document.querySelector('.popup-overlay');
-  const popupClose = document.querySelector('.popup-close');
+  const close = document.querySelector('.popup-close');
   const slider = document.querySelector('.slider-wrapper');
   const noScroll = document.querySelector('body');
+  const content = document.querySelector(".popup-content");
 
   slider.addEventListener('click', (e) => {
     let currCard = e.target.closest('.ourfriends-card');
     let cardAttr = currCard.classList[1];
       if (e.target.closest('.ourfriends-card')) {
         overlay.classList.add('popup-overlay__active');
-        noScroll.classList.toggle('body-no-scroll');
+        noScroll.classList.add('body-no-scroll');
         createPopup(cardAttr);
-        console.log(cardAttr)
     }
   })
   
   function createPopup(cardAttr) {
     for (let i = 0; i < sliderCards.length; i++) {
       if (sliderCards[i].name === cardAttr) {
-       x.insertAdjacentHTML('afterbegin', `
+       content.insertAdjacentHTML('beforeend', `
               <div class="content-img">
                 <img src="${sliderCards[i].imgPopup}" alt="pets" class="content-img__img">
               </div>
@@ -204,11 +224,15 @@ import sliderCards from "./main.json" assert { type: "json" };
   overlay.addEventListener('click', (e) => {
     if (e.target.classList.contains('popup-overlay')) {
       overlay.classList.remove('popup-overlay__active');
+      noScroll.classList.remove("body-no-scroll");
+      content.innerHTML = '';
     }
   });
 
-  popupClose.addEventListener('click', () => {
+  close.addEventListener('click', () => {
     overlay.classList.remove('popup-overlay__active');
+    noScroll.classList.remove("body-no-scroll");
+    content.innerHTML = '';
   });
 
 }());
