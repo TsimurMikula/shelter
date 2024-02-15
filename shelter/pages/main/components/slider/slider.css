@@ -1,0 +1,49 @@
+.ourfriends-slider {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.slider-wrapper {
+    width: 990px;
+    overflow: hidden;
+}
+
+.slider {
+    display: flex;
+    position: relative;
+    left: -990px;
+}
+
+.arrow-left, .arrow-right {
+    width: 52px;
+    height: 52px;
+    margin-top: 192px;
+}
+
+.arrow-left  {
+    background: url(./shelter/pages/main/assets/img/svg/button-arrow-left.svg) no-repeat;
+    margin-right: 53px;
+}
+
+.arrow-right  {
+    background: url(/shelter/pages/main/assets/img/svg/button-arrow-right.svg) no-repeat;
+    margin-left: 53px;
+}
+
+.ourfriends-button {
+    font-family: 'Georgia';
+    font-style: normal;
+    font-weight: 400;
+    width: 261px;
+    height: 52px;
+    font-size: 17px;
+    line-height: 22px;
+    letter-spacing: 0.06em;
+    color: #292929;
+    background-color: #F1CDB3;
+    border: 1px solid #F1CDB3;
+    border-radius: 100px;
+    margin-top: 60px;
+    padding: 15px 43px;
+}
